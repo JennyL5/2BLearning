@@ -47,7 +47,4 @@ for i=1:total
     
 end
 
-for i = 1 : 4
-    disp(i + ": " + MinDims);
-    %disp(MinDims(i));
 end
