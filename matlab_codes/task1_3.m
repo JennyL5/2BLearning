@@ -1,5 +1,4 @@
-%
-%
+
 function [EVecs, EVals, CumVar, MinDims] = task1_3(X)
 % Input:
 %  X : M-by-D data matrix (double)
@@ -12,42 +11,29 @@ function [EVecs, EVals, CumVar, MinDims] = task1_3(X)
 %calls comp_pca
 [EVecs,EVals]=comp_pca(X);
 
-
 %computes cumulative variances
 CumVar=cumsum(EVals);
-
 MinDims=zeros(4,1);
-total=size(CumVar,2);
+total=CumVar(end);
 
-%plots principle component 1 with var
+%plots principle component 1 with Cumulative Variance
 plot(CumVar)
 ylabel('Cumulative variance');
 xlabel('Number of Principal Components');
 box on
 
-
 % finds the minimum number of PCA dimensions to cover 70%, 80%, 90%, 95% of the total variance
-for i=1:total
-    if CumVar(i)>=0.7*CumVar(total) && MinDims(1)==0
-        MinDims(1)=i;
-    end
-    
-    if CumVar(i)>=0.8*CumVar(total) && MinDims(2)==0
-        MinDims(2)=i;
-    end
-    
-    if CumVar(i)>=0.9*CumVar(total) && MinDims(3)==0
-        MinDims(3)=i;
-    end
-    
-    if CumVar(i)>=0.95*CumVar(total) && MinDims(4)==0
-        MinDims(4)=i;
-        break
-    end
-    
-end
+MinDims(1) = find(CumVar>=0.7*total,1);
+MinDims(2) = find(CumVar>=0.8*total,1);
+MinDims(3) = find(CumVar>=0.9*total,1);
+MinDims(4) = find(CumVar>=0.95*total,1);
 
-for i = 1 : 4
-    disp(i + ": " + MinDims);
-    %disp(MinDims(i));
+% disp(MinDims);
+% save('task1_3_evecs.mat','EVecs');
+% save('task1_3_evals.mat','EVals');
+% save('task1_3_cumvar.mat','CumVar');
+% save('task1_3_mindims.mat','MinDims');
 end
+ 
+
+

@@ -6,14 +6,18 @@ Xtst = double(Xtst)/255.0;
 
 %task1_1(Xtrn,Ytrn);
 %task1_2(Xtrn,Ytrn);
-[Evecs, Evals] = comp_pca(Xtrn);
-[vectors, values,variance,mins]=task1_3(Xtrn);
-%disp(mins);
+
+%[Evecs, Evals] = comp_pca(Xtrn);
+%[vectors, values,variance,mins]=task1_3(Xtrn);
 %task1_4(vectors);
 
-%Ks = [1,2,3,4,5,7,10,15,20]; 
-%task1_5(Xtrn, Ks); 
+Ks = [1,2,3,4,5,7,10,15,20]; 
+task1_5(Xtrn, Ks); 
 
+
+% for k = 1 : Ks
+%     task1 6('task1_5_c_k.mat') %for each k in ks in task1_5
+% end
 %Dmap = task1_7('task1 5 c k.mat', 'task1 2 M.mat', 'task1 3 evecs.mat',
 %'task1 3 evals.mat', mean(Xtrn), 200);
 

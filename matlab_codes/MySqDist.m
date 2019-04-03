@@ -23,7 +23,4 @@ DI = repmat(XX, 1, M) - 2 * Xtst * Xtrn' + repmat(YY, 1, N)';
 % %product calculate beforehand
 % 
 % DistMatrix = repmat(XX,1,M)- (2*Mat1*Mat2.') + (repmat(YY,1,N)).';
-% 
-
-
 end

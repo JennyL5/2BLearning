@@ -7,10 +7,8 @@ function [EVecs, EVals] = comp_pca(X)
 %   EVals:
 %       Eigenvalues in descending order, D x 1 vector (double)
 %   (Note that the i-th columns of Evecs should corresponds to the i-th element in EVals)
-  %% TO-DO
 
-
-% %calculate covariance of matrix
+%calculate covariance of matrix
 mu = sum(X) / size(X,1); %calculates mean vector
 M = bsxfun(@minus,X,mu); 
 W= M'*M/(size(X,1)-1); % covariance matrix
@@ -27,10 +25,7 @@ for i=1:size(V)
 end
 
 % eigenvalues should be sorted in descending order, so that 1 is the largest and D is the smallest
-
-[EVals, indices]=sort(D,'descend'); % store the indices of which columns the sorted eigenvalues come from
-EVecs = V(:,indices); % arrange the columns in this order
-
-
+[EVals, indices]=sort(D,'descend'); 
+EVecs = V(:,indices); 
 end
 
