@@ -14,47 +14,44 @@ function Dmap = task1_7(MAT_ClusterCentres, MAT_M, MAT_evecs, MAT_evals, posVec,
 %	   the cluster number that the point belongs to.
 
 
-
-Dmap=zeros(nbins);
-
-PCA1=evecs(1,:);
-PCA2=evecs(2,:);
-
-meanPCA1= sum(PCA1)/size(PCA1);
-meanPCA2= sum(PCA2)/size(PCA2);
-
-varPCA1= (PCA1-meanPCA1)/size(PCA1);
-varPCA2= (PCA1-meanPCA2)/size(PCA2);
-
-
-PCA1Min=(meanPCA1-5*varPCA1)*PCA1;
-PCA1Max=(meanPCA1+ 5*varPCA1)*PCA1;
-
-PCA2Min=(meanPCA2-5*varPCA2)*PCA2;
-PCA2Max=(meanPCA2+5*varPCA2)*PCA2;
-
-V=[PCA1 PCA2];
-X=zeros(nbins*nbins,784);
-o=1;
-
-for i=1:nbins
-    for j=1:nbins
-        intialIndex=[i j];
-        initialIndex=V'\initialIndex;
-        initialIndex=initialIndex+posVec;
-        X(o)=initialIndex;
-        o=o+1;
-    end
+load(MAT_evecs,'EVecs');
+load(MAT_evals,'EVals');
+load(MAT_M,'M');
+load(MAT_ClusterCentres,'C');
+mean = M(end,:); % row vectors
+Y1 = EVecs(:,1); %column vectors
+Y2 = EVecs(:,2);
+numGridPoints = nbins*nbins;
+% The means are the projection of the mean onto the 2 principal components
+meanY1 = mean*Y1;
+meanY2 = mean*Y2;
+varY1 = EVals(1,:);
+varY2 = EVals(1,:);
+Y1plot = linspace(meanY1-5*sqrt(varY1),meanY2+5*sqrt(varY1), nbins)';
+Y2plot = linspace(meanY1-5*sqrt(varY2),meanY2+5*sqrt(varY2), nbins)';
+% Obtain the grid vectors for the two dimensions
+[Y1v Y2v] = meshgrid(Y1plot, Y2plot);
+grid2D = [Y1v(:), Y2v(:)]; % Concatenate to get a 2-D point.			  
+%Dmap = grid2D;
+% Revert projection into D-Space 
+projectedGridPoints = zeros(numGridPoints,784);
+for i=1:numGridPoints
+    projectedGridPoints(i,:) = (EVecs*padarray(grid2D(i,:),[0 782], 'post')'+posVec')'; % Orthogonality of EVecs implies that the inverse of EVecs is EVecs'
 end
 
-o=o-1;
-
-[C, idx, SSE] = my_kMeansClustering(X, size(ClusterCentres), ClustersCentres, maxIter);
-
-for i=1:nbins
-    for j=1:nbins
-        Dmap(i,j)=idx((i-1)*nbins+j);
-    end
+%1-NN Classification
+classesOfPoints = zeros(numGridPoints,1);
+distMatr = mySqDist(projectedGridPoints,C,numGridPoints,size(C,1));
+for i=1:numGridPoints
+    [minDist,clusterIndex] = min(distMatr(i,:));
+    classesOfPoints(i,:) = clusterIndex;
 end
+
+Dmap = permute(reshape(classesOfPoints,nbins,nbins),[2 1])
+
+% This function will draw the decision boundaries
+figure
+[CC,h] = contourf(Y1plot(:), Y2plot(:),reshape(classesOfPoints, length(Y1plot), length(Y2plot)));
+set(h,'LineColor','none');
 
 end
