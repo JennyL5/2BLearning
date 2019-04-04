@@ -1,36 +1,30 @@
-function [Ypreds] = run_knn_classifier(Xtrain, Ytrain, Xtest, Ks)
-% Input:
-%   Xtrain : M-by-D training data matrix (double)
-%   Ytrain : M-by-1 label vector (uint8) for Xtrain
-%   Xtest  : N-by-D test data matrix (double)
-%   Ks     : 1-by-L vector (integer) of the numbers of nearest neighbours in Xtrain
-% Output:
-%   Ypreds : N-by-L matrix (uint8) of predicted labels for Xtest
+function [Ypreds] = run_knn_classifier(Xtrn, Ytrn, Xtst, Ks)
+%Input:
+%  Xtrain : M-by-D training data matrix (double)
+%  Ytrain : M-by-1 label vector (unit8) for Xtrain
+%  Xtest  : N-by-D test data matrix (double)
+%  Ytest  : N-by-1 label vector (unit8) for Xtest
+%  Ks     : 1-by-L vector (integer) of the numbers of nearest neighbours in Xtrain
+%Output:
+%  [Ypreds] : N-by-L matrix of predicted labels for Xtst
 
-% Matrix sizes
-N = size(Xtest, 1);          % number of test samples
-L = size(Ks, 2);            % number of different k-values to use
+%Calculating the Eucledean Distance
+numXtrn = size(Xtrn,1);
+numXtst = size(Xtst,1);
+num = size(Ks,2);
+%Calls MySqDist (vectorisation)
+DM = MySqDist(Xtst,Xtrn,numXtst,numXtrn);
 
-% Compute distances between each test sample and each training sample
-DI = MySqDist(Xtrain, Xtest);
+Ypreds = zeros(numXtst,num);
 
-% Sort the distances between each test sample and all the training samples
-[~, idx] = sort(DI, 2, 'ascend');                   % idx = N-by-M matrix
-
-% Initialise prediction matrix (N-by-L)
-Ypreds = zeros(N, L);
-
-% Iterate over each value of k from Ks
-for i = 1:L   
-    % Select the indexes corresponding to k nearest neighbours
-    k = Ks(i);
-    % Add 1 column in case k==1
-    k_idx = [idx(:, 1:k) ones(N,1)];                % k_idx = N-by-(k+1) matrix
-
-    % Choose the most frequent class out of the k neighbours, for each sample
-    classes = Ytrain(k_idx);
-    classes = classes(:,1:end-1);                   % remove last column
-    Ypreds(:,i) =  mode(classes, 2);
+for i=1:num
+    for j=1:numXtst
+        [d I] = sort(DM(j,:), 'ascend');
+        % Calculate the mode of the predicted data
+        Ypreds(j,i) = mode(Ytrn(I(1:Ks(i))));
+    end
+end
 end
 
-end
+
+

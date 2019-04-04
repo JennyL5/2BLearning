@@ -14,12 +14,12 @@ Xtst = double(Xtst)/255.0;
 Ks = [1,2,3,4,5,7,10,15,20]; 
 task1_5(Xtrn, Ks); 
 
-
 % for k = 1 : Ks
-%     task1 6('task1_5_c_k.mat') %for each k in ks in task1_5
+     task1_6('task1_5_c_k.mat') %for each k in ks in task1_5
 % end
-%Dmap = task1_7('task1 5 c k.mat', 'task1 2 M.mat', 'task1 3 evecs.mat',
-%'task1 3 evals.mat', mean(Xtrn), 200);
 
-%Ks = [1,3,5,10,20]; 
-%task2_1(Xtrn, Ytrn, Xtst, Ytst, Ks);
+% k = [1,2,3,5,10]; 
+% Dmap = task1_7('task1_5_c_k.mat', 'task1_2_M.mat', 'task1_3_evecs.mat', 'task1_3_evals.mat', mean(Xtrn), 200); 
+
+% Ks = [1,3,5,10,20]; 
+% task2_1(Xtrn, Ytrn, Xtst, Ytst, Ks);

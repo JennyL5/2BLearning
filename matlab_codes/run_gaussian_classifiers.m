@@ -16,11 +16,7 @@ D = size(Xtrain,2);
 N = size(Xtest,1);
 K = 10;             % number of classes
 
-%compute covairance matrix
-L = size(matrix, 1);
-diff = matrix' - repmat(MyMean, 1, L);
-myCov = (diff * diff') / L;
-
+% covairance matrix MyCov
 
 % Compute matrix of sample mean vectors 
 %   & 3D array of sample covariance matrices (including regularisation)
@@ -42,7 +38,7 @@ for k = 1:K
     mu = Ms(:,k);
     sigma = Covs(:,:,k);
     diff = Xtst' - repmat(mu, 1, N);
-    post_matrix = - 0.5 * diff' * inv(sigma) * diff - 0.5 * log(det(sigma));
+    post_matrix = - 0.5 * diff' * INV(sigma) * diff - 0.5 * log(det(sigma));
     post_log(:,k) =  diag(post_matrix);
 end
 

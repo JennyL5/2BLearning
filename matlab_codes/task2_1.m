@@ -8,42 +8,37 @@ function task2_1(Xtrain, Ytrain, Xtest, Ytest, Ks)
 %  Ytest  : N-by-1 label vector (unit8) for Xtest
 %  Ks     : 1-by-L vector (integer) of the numbers of nearest neighbours in Xtrain
 
-%Runs a classi?cation experiment on the data set using run knn classifier.
-tic
-[Ypreds] = run_knn_classifier(Xtrain, Ytrain, Xtest, Ks);
-toc
- %Measures the user time taken for the classi?cation experiment, and display the 
- %time (in seconds) to the standard output (i.e. display). 
- 
- 
- for i=1:length(Ks)
-    idx = Ks(i);
-    [cm, acc] = comp_confmat(Ytest, Ypreds(:,i));
-    save(sprintf('cm%d',idx), 'cm');
+num = size(Xtest,1);
+K=10;
+%disp(num);
+
+for k=1:size(Ks, 2)
+    %Measure the time taken, and display it.
+    tic
+    Ypreds = run_knn_classifier(Xtrain, Ytrain, Xtest, Ks(k));
+    time = toc;
+%     fprintf('Number of nearest neighbours: %d. \n',Ks(k));
+%     fprintf('Number of test samples: %d.\n',num);
+     fprintf('Time taken for k = %d at %.2fs.\n',Ks(k),time);
+    
+    %Get confusion matrix and accuracy for each k in Ks
+    [cm, acc] = comp_confmat(Ytest, Ypreds(:,1),K);
+    acc = acc*100;
+    %Save each confusion matrix
+    save(sprintf('task2_1_cm%d.mat',Ks(k)));
     
     %Sum of wrongly classified samples
-    sum = 0;
+    Nerrs = num-sum(diag(cm));
+    %fprintf('\nNumber of wrongly classified test samples: %d\n', wrong);
     
-    %Number of wrongly classified samples
-    for j=1:26
-        for k=1:26
-            if j~=k 
-                sum = sum + cm(j,k);
-            end
-        end
-    end
-    
-    
-    %NumNeighbours = sprintf('Number of K-nearest neighbours: %d, Number of test samples: %d, Number of wrongly classified test samples: %d, Accuracy: %d',idx,size(Xtst,1), sum, acc);
-                          
-    %disp(NumNeighbours);
- 
- k= idx;
- N=size(Xtest, 1);
-  disp(k); % The number of nearest neighbours idx
-  disp(N); % The number of test samples size(Xtst,1),
-  disp(Nerrs) % The number of wrongly classi?ed test samples  sum
-  disp(acc) %Accuracy (i.e. correct classi?cation rate) acc
+    %display
+     NumNeighbours = sprintf('Number of K-nearest neighbours: %d, Number of test samples: %d, Number of wrongly classified test samples: %d, Accuracy: %d',Ks(k),num, Nerrs, acc);                   
+     disp(NumNeighbours);
 
+%   disp(k); % The number of nearest neighbours k
+%   disp(num); % The number of test samples size(Xtst,1),
+%   disp(Nerrs) % The number of wrongly classi?ed test samples  sum
+%   disp(acc) %Accuracy (i.e. correct classi?cation rate) acc
 
+    
 end

@@ -1,26 +1,19 @@
-function DI = MySqDist(Xtrn, Xtst)
-% Compute square distances between 2 matrix of samples
-% Inputs:
-%   Xtrn: M-by-D matrix of M samples, each of dimension D
-%   Xtst: N-by-D matrix of N samples, each of dimension D
-% Ouptut:
-%   DI: N-by-M euclidean square-distance matrix, where DI(i,j) is the distance
-%       between sample Xtst(i,:) and sample Xtrn(j,:)
+function DM = MySqDist(X1, X2, D1, D2 )
+%Input: X1 is the Xtrn, X2 is the Xtst, D1 is the dimension of Xtrn, and D2
+%is the dimension of Xtst
+%DM = MySqDist(X, initialCentres(X,C, num, k));
 
-M = size(Xtrn, 1);          % number of training samples
-N = size(Xtst, 1);          % number of test samples
+%Using Vectorisation
+X1Sqr = zeros(D1,1);
+X2Sqr = zeros(D2,1);
+for i=1:D1
+    X1Sqr(i,:) = X1(i,:)*X1(i,:)';
+end
 
-% Compute the squared distance, using vectorisation
-XX = sum(Xtst .^ 2, 2);
-YY = sum(Xtrn .^ 2, 2);
-DI = repmat(XX, 1, M) - 2 * Xtst * Xtrn' + repmat(YY, 1, N)'; 
+for i=1:D2
+    X2Sqr(i,:) = X2(i,:)*X2(i,:)';
+end
 
-% %Calculate the dot product
-% XX = dot(Mat1, Mat1, 2);
-% YY = dot(Mat2, Mat2, 2);
-% 
-% %Get the eucledean between each training point and test point using the dot
-% %product calculate beforehand
-% 
-% DistMatrix = repmat(XX,1,M)- (2*Mat1*Mat2.') + (repmat(YY,1,N)).';
+DM = repmat(X1Sqr,1,D2) - 2*X1*X2' + repmat(X2Sqr,1,D1)';
+
 end

@@ -1,4 +1,4 @@
-function [EVecs, EVals] = comp_pca(X)
+ function [EVecs, EVals] = comp_pca(X)
 % Input: 
 %   X:  N x D matrix (double)
 % Output: 

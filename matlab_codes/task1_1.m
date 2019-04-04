@@ -13,6 +13,7 @@ for k = 1:rw %for each training sample
     end
 	%present the 10 first samples of a class before moving onto the next one
     if (counter > 10)
+        figure;
         MyMontage = montage(CM); %creates montage
         disp(label);
         counter = 1; % reset counter, to count dimensions
