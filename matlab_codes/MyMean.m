@@ -1,8 +1,8 @@
 function [means] = MyMean(X)
 % Input:
-%   X: M-by-D data matrix
+%    X: M-by-D data matrix
 % Output:
-%   means: D-by-1 column vector of sample mean values, where means(i) = mean(matrix(:,i))
+%    means: D-by-1 sample mean vector
 
 %to avoid dividing by 0
 if (size(X,1) == 0) 

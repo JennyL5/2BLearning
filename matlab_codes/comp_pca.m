@@ -11,7 +11,7 @@
 %calculate covariance of matrix
 mu = sum(X) / size(X,1); %calculates mean vector
 M = bsxfun(@minus,X,mu); 
-W= M'*M/(size(X,1)-1); % covariance matrix
+W= M'*M/(size(X,1)-1); 
 
 [V,D]=eig(W);
 D = diag(D);

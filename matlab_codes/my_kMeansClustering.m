@@ -19,20 +19,18 @@ end
 idx = zeros(num, 1);                                      
 C = initialCentres;
 
-
 % Iterate 'maxiter' times
 for i = 1:maxIter
     idxInvariant = true;
     SSE(i,1) = 0;
-    % Compute Squared Euclidean distance (i.e. the squared distance)
-    %   between each cluster centre and each observation
-    %for d = 1:k
-     DM = MySqDist(X,C, num, k);
-    %end
+    % Compute Squared Euclidean distance between each cluster centre and each observation
+    DM = MySqDist(X,C, num, k);
     
     for n = 1 : num
-        [minD, ind] = min(DM(n,:));
-        SSE(i,1) = SSE(i,1) + minD;
+        % Assign data to clusters 
+        % Ds are the actual distances and ind are the cluster assignments
+        [Ds, ind] = min(DM(n,:)); %find min dist. for each observation
+        SSE(i,1) = SSE(i,1) + Ds;
         if idx(n) ~= ind
             idxInvariant = false;
             idx(n) = ind;
@@ -46,26 +44,13 @@ for i = 1:maxIter
     % Update cluster centres
     C = zeros(k, d);
     for c = 1:k
-       
+        %check the number of samples assigned to this cluster 
         if (sum(idx==c) == 0)
              fprintf('cluser %d is empty', c);
         end
-
-        Xcluster = X(idx==c,:);
-        bott = size(Xcluster,1);
-        C(c, :) = (1/bott) * sum(Xcluster);
-    end
-    
-     SSE = 0;
-    % Calculate sum squared error for iteration i
-    for c = 1:k
-        member_mat = X(idx==c,:);                                                  % Matrix of points that belong to cluster c
-        centre_sub_mat = member_mat - repmat(initialCentres(c, :), size(member_mat,1),1); % Subtracts cluster centre from each point
-        l2_norm_mat = sqrt(sum(centre_sub_mat.^2,2));                              % Calculates L2 norm of each vector
-        SSE = sum(l2_norm_mat,1) + SSE;
+         C(c, :) = (1/size(X(idx==c,:),1) * sum(X(idx==c,:)));
     end
 
-    C=initialCentres;
 end
 
 

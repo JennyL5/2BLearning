@@ -23,10 +23,10 @@ xlabel('Number of Principal Components');
 box on
 
 % finds the minimum number of PCA dimensions to cover 70%, 80%, 90%, 95% of the total variance
-MinDims(1) = find(CumVar>=0.7*total,1);
-MinDims(2) = find(CumVar>=0.8*total,1);
-MinDims(3) = find(CumVar>=0.9*total,1);
-MinDims(4) = find(CumVar>=0.95*total,1);
+MinDims(1) = find(CumVar >= 0.7*total,1);
+MinDims(2) = find(CumVar >= 0.8*total,1);
+MinDims(3) = find(CumVar >= 0.9*total,1);
+MinDims(4) = find(CumVar >= 0.95*total,1);
 
 % disp(MinDims);
 % save('task1_3_evecs.mat','EVecs');

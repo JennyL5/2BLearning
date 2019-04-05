@@ -20,8 +20,8 @@ end
 acc = sum(diag(CM))/C;
 
 % Display accuracy as percentage
-acc = acc*100;
-fprintf('Accuracy: %.4f. \n',acc);
+% acc = acc*100;
+% fprintf('Accuracy: %.4f. \n',acc);
 
 
 end

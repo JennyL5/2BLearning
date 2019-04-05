@@ -3,6 +3,7 @@ function DM = MySqDist(X1, X2, D1, D2 )
 %is the dimension of Xtst
 %DM = MySqDist(X, initialCentres(X,C, num, k));
 
+%sum of square euclidean distances
 %Using Vectorisation
 X1Sqr = zeros(D1,1);
 X2Sqr = zeros(D2,1);
