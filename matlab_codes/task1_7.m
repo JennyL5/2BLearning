@@ -1,5 +1,3 @@
-%
-%
 function Dmap = task1_7(MAT_ClusterCentres, MAT_M, MAT_evecs, MAT_evals, posVec, nbins)
 % Input:
 %  MAT_ClusterCentres: MAT filename of cluster centre matrix
@@ -9,49 +7,51 @@ function Dmap = task1_7(MAT_ClusterCentres, MAT_M, MAT_evecs, MAT_evals, posVec,
 %  MAT_evals : MAT filename of eigenvalue vector of D-by-1
 %  posVec    : 1-by-D vector (double) to specify the position of the plane
 %  nbins     : scalar (integer) to specify the number of bins for each PCA axis
-% Output
+% Output:
 %  Dmap  : nbins-by-nbins matrix (uint8) - each element represents
 %	   the cluster number that the point belongs to.
 
-
+load(MAT_ClusterCentres,'C');
+load(MAT_M,'M');
 load(MAT_evecs,'EVecs');
 load(MAT_evals,'EVals');
-load(MAT_M,'M');
-load(MAT_ClusterCentres,'C');
+
+% For the start position of the plot, project mean vector into 2D pca space 
 mean = M(end,:); % row vectors
-Y1 = EVecs(:,1); %column vectors
-Y2 = EVecs(:,2);
+X = EVecs(:,1); %column vectors
+Y = EVecs(:,2);
 numGridPoints = nbins*nbins;
-% The means are the projection of the mean onto the 2 principal components
-meanY1 = mean*Y1;
-meanY2 = mean*Y2;
-varY1 = EVals(1,:);
-varY2 = EVals(1,:);
-Y1plot = linspace(meanY1-5*sqrt(varY1),meanY2+5*sqrt(varY1), nbins)';
-Y2plot = linspace(meanY1-5*sqrt(varY2),meanY2+5*sqrt(varY2), nbins)';
+meanX = mean*X;
+meanY = mean*Y;
+varX = EVals(1,:);
+varY = EVals(1,:);
+
+Xplot = linspace(meanX-5*sqrt(varX),meanY+5*sqrt(varX), nbins)';
+Yplot = linspace(meanX-5*sqrt(varY),meanY+5*sqrt(varY), nbins)';
 % Obtain the grid vectors for the two dimensions
-[Y1v Y2v] = meshgrid(Y1plot, Y2plot);
-grid2D = [Y1v(:), Y2v(:)]; % Concatenate to get a 2-D point.			  
-%Dmap = grid2D;
-% Revert projection into D-Space 
+[Xv Yv] = meshgrid(Xplot, Yplot);
+Dmap = [Xv(:), Yv(:)]; % Concatenate to get a 2D point holding the class number
+
+% Convert the 2D coordinate from the dmap back to a D dimensional 
+% feature vector to feed it back into k-nn classfier
 projectedGridPoints = zeros(numGridPoints,784);
 for i=1:numGridPoints
-    projectedGridPoints(i,:) = (EVecs*padarray(grid2D(i,:),[0 782], 'post')'+posVec')'; % Orthogonality of EVecs implies that the inverse of EVecs is EVecs'
+    projectedGridPoints(i,:) = (EVecs*padarray(Dmap(i,:),[0 782], 'post')'+posVec')'; 
 end
 
-%1-NN Classification
-classesOfPoints = zeros(numGridPoints,1);
-distMatr = mySqDist(projectedGridPoints,C,numGridPoints,size(C,1));
-for i=1:numGridPoints
-    [minDist,clusterIndex] = min(distMatr(i,:));
-    classesOfPoints(i,:) = clusterIndex;
+%K-NN Classification for each test point
+classes = length(Xv(:));
+DM = MySqDist(projectedGridPoints,C,numGridPoints,size(C,1)); %Compute distances
+for i=1:length(Dmap)
+    [~,idx] = min(DM(i,:));
+    classes(i,:) = idx;
 end
 
-Dmap = permute(reshape(classesOfPoints,nbins,nbins),[2 1])
+Dmap = permute(reshape(classes,nbins,nbins),[2 1]);
 
-% This function will draw the decision boundaries
+% Draws the decision boundaries
 figure
-[CC,h] = contourf(Y1plot(:), Y2plot(:),reshape(classesOfPoints, length(Y1plot), length(Y2plot)));
+[CC,h] = contourf(Xplot(:), Yplot(:),reshape(classes, length(Xplot), length(Yplot)));
 set(h,'LineColor','none');
 
 end
