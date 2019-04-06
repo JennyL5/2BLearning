@@ -11,8 +11,8 @@ Xtst = double(Xtst)/255.0;
 % [vectors, values,variance,mins]=task1_3(Xtrn);
 % task1_4(vectors);
 % 
-% Ks = [1,2,3,4,5,7,10,15,20]; 
-% task1_5(Xtrn, Ks); 
+%  Ks = [1,2,3,4,5,7,10,15,20]; 
+%  task1_5(Xtrn, Ks); 
 % for i=1:size(Ks, 2)
 %      figure
 %      task1_6(sprintf('task1_5_c_%d.mat',Ks(i)));
@@ -32,3 +32,13 @@ Xtst = double(Xtst)/255.0;
   
 %  Ks = [1,3,5,10,20]; 
 %  task2_1(Xtrn, Ytrn, Xtst, Ytst, Ks);
+% 
+% k = [1,3];
+% Dmap = task2_2(Xtrn, Ytrn, 1, 'task1_3_evecs.mat', 'task1_3_evals.mat', mean(Xtrn), 200);
+% save('task2_2_dmap_1.mat','Dmap');
+% Dmap = task2_2(Xtrn, Ytrn, 3, 'task1_3_evecs.mat', 'task1_3_evals.mat', mean(Xtrn), 200);
+% save('task2_2_dmap_3.mat','Dmap');
+
+
+%task2_3(Xtrn, Ytrn);
+
