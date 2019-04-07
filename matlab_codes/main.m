@@ -19,7 +19,7 @@ Xtst = double(Xtst)/255.0;
 % end
 
 % k = [1,2,3,5,10]; 
-% Dmap = task1_7('task1_5_c_1.mat', 'task1_2_M.mat', 'task1_3_evecs.mat','task1_3_evals.mat', mean(Xtrn), 200);
+%  Dmap = task1_7('task1_5_c_1.mat', 'task1_2_M.mat', 'task1_3_evecs.mat','task1_3_evals.mat', mean(Xtrn), 200);
 % save('task1_7_dmap_1.mat','Dmap');
 % Dmap = task1_7('task1_5_c_2.mat', 'task1_2_M.mat', 'task1_3_evecs.mat','task1_3_evals.mat', mean(Xtrn), 200);
 % save('task1_7_dmap_2.mat','Dmap');
@@ -40,5 +40,14 @@ Xtst = double(Xtst)/255.0;
 % save('task2_2_dmap_3.mat','Dmap');
 
 
-%task2_3(Xtrn, Ytrn);
-
+% task2_3(Xtrn, Ytrn);
+% Corrs = task2_4(Xtrn, Ytrn);
+% task2_5(Xtrn, Ytrn, Xtst, Ytst, 0.01);
+%  Dmap = task2_6(Xtrn, Ytrn, 0.01, 'task1_3_evecs.mat', 'task1_3_evals.mat',mean(Xtrn), 200);
+%  save('task2_6_dmap.mat', 'Dmap');
+ratio = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3];
+for(r=ratio)
+    [CM acc] = task2_7(Xtrn, Ytrn, Xtst, Ytst, 0.01, r);
+    save(sprintf('task2_7_cm_%d.mat',r*100), 'CM');
+    [r acc]
+end

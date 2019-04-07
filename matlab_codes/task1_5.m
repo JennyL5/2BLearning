@@ -9,17 +9,18 @@ for i=1:size(Ks,2)
   t = tic; 
   [C,idx,SSE] =  my_kMeansClustering(X,k,X(1:k,:)); 
   times = toc(t);
-  fprintf('k: %d at %d\n', k, times);
+  fprintf('k = %d at %d seconds.\n', k, times);
   
-  save(sprintf('task1_5_c_%d.mat',k),'C');
-  save(sprintf('task1_5_idx_%d.mat',k),'idx');
-  save(sprintf('task1_5_sse_%d.mat',k),'SSE');
+%   save(sprintf('task1_5_c_%d.mat',k),'C');
+%   save(sprintf('task1_5_idx_%d.mat',k),'idx');
+%   save(sprintf('task1_5_sse_%d.mat',k),'SSE');
   
   %Plot Graph
   figure;
   plot (SSE);
   hold on;
-  title(['SSE for k = ' Ks(i)]);
+  k = Ks(i);
+  title(['SSE for k = ' k]);
   xlabel("Number of Iterations")
   ylabel("SSE")
 

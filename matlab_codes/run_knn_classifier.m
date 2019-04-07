@@ -1,12 +1,12 @@
 function [Ypreds] = run_knn_classifier(Xtrn, Ytrn, Xtst, Ks)
 %Input:
-%  Xtrain : M-by-D training data matrix (double)
-%  Ytrain : M-by-1 label vector (unit8) for Xtrain
-%  Xtest  : N-by-D test data matrix (double)
-%  Ytest  : N-by-1 label vector (unit8) for Xtest
-%  Ks     : 1-by-L vector (integer) of the numbers of nearest neighbours in Xtrain
+%   Xtrn : M-by-D training data matrix (double)
+%   Ytrn : M-by-1 label vector (unit8) for Xtrain
+%   Xtst  : N-by-D test data matrix (double)
+%   Ytst  : N-by-1 label vector (unit8) for Xtest
+%   Ks     : 1-by-L vector (integer) of the numbers of nearest neighbours in Xtrain
 %Output:
-%  [Ypreds] : N-by-L matrix of predicted labels for Xtst
+%   [Ypreds] : N-by-L matrix of predicted labels for Xtst
 
 %Calculating the Eucledean Distance
 numXtrn = size(Xtrn,1);

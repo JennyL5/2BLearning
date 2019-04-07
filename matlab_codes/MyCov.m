@@ -1,4 +1,4 @@
-function Covs = MyCov(Matrix, Means)
+function Covs = MyCov(Matrix)
 % Input:
 %    Matrix : A-by-D data matrix
 %    Means  : D-by-1 sample mean vector
@@ -7,7 +7,7 @@ function Covs = MyCov(Matrix, Means)
 
 % Size
 A = size(Matrix, 1);
-
+Means = MyMean(Matrix);
 % Compute covariance matrix
 d = Matrix' - repmat(Means, 1, A);
 Covs = (d * d') / A;

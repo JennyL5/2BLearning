@@ -1,3 +1,4 @@
+
 function [Ypreds, Ms, Covs] = run_gaussian_classifiers(Xtrain, Ytrain, Xtest, epsilon)
 % Input:
 %   Xtrain : M-by-D training data matrix (double)
@@ -8,42 +9,35 @@ function [Ypreds, Ms, Covs] = run_gaussian_classifiers(Xtrain, Ytrain, Xtest, ep
 %  Ypreds : N-by-1 matrix (uint8) of predicted labels for Xtest
 %  Ms     : K-by-D matrix (double) of mean vectors
 %  Covs   : K-by-D-by-D 3D array (double) of covariance matrices
+    
+[numTrain, dimTrain] = size(Xtrain);
+[numTest, dimTest] = size(Xtest);
+Ms = zeros(10,dimTrain);
+Covs = zeros(10,dimTrain,dimTrain);
 
-%YourCode - Bayes classification with multivariate Gaussian distributions.
-
-% Size of matrices
-D = size(Xtrain,2);
-N = size(Xtest,1);
-K = 10;             % number of classes
-
-% covairance matrix MyCov
-
-% Compute matrix of sample mean vectors 
-%   & 3D array of sample covariance matrices (including regularisation)
-Ms = zeros(D,K);
-Covs = zeros(D,D,K);
-for k = 1:K
-    samples = Xtrain(Ytrain == k, :);           % training samples from class k
-    mu = myMean(samples);
-    Ms(:,k) = mu;
-    Covs(:,:,k) = MyCov(samples, mu) + eye(D) * epsilon;
+%Learn parameters
+for i=1:10
+    classElements = Xtrain((Ytrain==i-1),:);
+    Ms(i,:) = MyMean(classElements);
+    Covs(i,:,:) = MyCov(classElements);
 end
 
-% NB: No need to include the prior probability to compute the posterior
-%     probability, since we assume a uniform prior distribution over class
-
-% Compute posterior probabilities for the test samples, in the log domain
-post_log = zeros(N, K);
-for k = 1:K
-    mu = Ms(:,k);
-    sigma = Covs(:,:,k);
-    diff = Xtst' - repmat(mu, 1, N);
-    post_matrix = - 0.5 * diff' * INV(sigma) * diff - 0.5 * log(det(sigma));
-    post_log(:,k) =  diag(post_matrix);
+%Classification
+logProbMatrix = zeros(10,numTest);
+for i=1:10
+    % returns log likelihood array for N X D data points x
+    mu=Ms(i,:);
+    Sigma = reshape(Covs(i,:,:), [dimTrain,dimTrain]);
+    Sigma = Sigma + epsilon*eye(size(Sigma,1));
+    [N,D] = size(Xtest);
+    const = -0.5 * D * log(2*pi);
+    xc = bsxfun(@minus,Xtest,mu);
+    logp = (-0.5 * sum((xc / Sigma) .* xc, 2))' + (const - 0.5 * logdet(Sigma));
+    logProbMatrix(i,:) = logp;%(Ms(i,:),reshape(Covs(i,:,:), [dimTrain,dimTrain]), Xtest, epsilon);
 end
 
-% Choose the class corresponding to the max posterior probability, for each test sample
-[~, Ypreds] = max(post_log, [], 2);
+[maxV,maxI] = max(logProbMatrix);
+Ypreds = (maxI - ones(1,numTest))'; %Subtract 1 since working with labels zero
 
 
 end

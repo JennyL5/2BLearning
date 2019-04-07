@@ -17,6 +17,7 @@ MinDims=zeros(4,1);
 total=CumVar(end);
 
 %plots principle component 1 with Cumulative Variance
+figure;
 plot(CumVar)
 ylabel('Cumulative variance');
 xlabel('Number of Principal Components');

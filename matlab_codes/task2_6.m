@@ -1,5 +1,4 @@
-%
-%
+
 function Dmap = task2_6(X, Y, epsilon, MAT_evecs, MAT_evals, posVec, nbins)
 % Input:
 %  X        : M-by-D data matrix (double)
@@ -13,5 +12,44 @@ function Dmap = task2_6(X, Y, epsilon, MAT_evecs, MAT_evals, posVec, nbins)
 %  Dmap  : nbins-by-nbins matrix (uint8) - each element represents
 %	   the cluster number that the point belongs to.
 
-			  
+load(MAT_evecs,'EVecs');
+load(MAT_evals,'EVals');
+numSamples = size(X,1);
+% For the start position of the plot, project mean vector into 2D pca space 
+mean = MyMean(X); % row vectors
+E1 = EVecs(:,1); %column vectors
+E2 = EVecs(:,2);
+numGridPoints = nbins*nbins;
+meanE1 = mean*E1;
+meanE2 = mean*E2;
+varE1 = EVals(1,:);
+varE2 = EVals(2,:);
+
+E1plot = linspace(meanE1-5*sqrt(varE1),meanE2+5*sqrt(varE1), nbins)';
+E2plot = linspace(meanE1-5*sqrt(varE2),meanE2+5*sqrt(varE2), nbins)';
+% Obtain the grid vectors for the two dimensions
+[E1v E2v] = meshgrid(E1plot, E2plot);
+Dmap = [E1v(:), E2v(:)]; % Concatenate to get a 2D point holding the class number
+
+% Convert the 2D coordinate from the dmap back to a D dimensional 
+% feature vector to feed it back into k-nn classfier
+projectedGridPoints = zeros(numGridPoints,784);
+for i=1:numGridPoints
+    projectedGridPoints(i,:) = (EVecs*padarray(Dmap(i,:),[0 782], 'post')'+posVec')'; 
+end
+
+%Classification by assigning each data point to the closest center in C.
+%Gaussian Classification
+[Ypreds, Ms, Covs] = run_gaussian_classifiers(Xtrain, Ytrain, projectedGridPoints, 0.01);
+classification = Ypreds(:,1);
+
+Dmap = permute(reshape(classification,nbins,nbins),[2 1]);
+Dmap = uint8(Dmap);
+
+% Draws the decision boundaries
+figure
+[CC,h] = contourf(E1plot(:), E2plot(:),reshape(classification, length(E1plot), length(E2plot)));
+set(h,'LineColor','none');
+
+    
 end
