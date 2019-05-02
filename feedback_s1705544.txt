@@ -1,0 +1,51 @@
+=== Inf2B cwk2 feedback for s1705544 ==================
+
+
+Task1.2:	 5
+
+Task1.3:	 7
+
+Task1.4:	 5
+
+Task1.5:	 6
+
+Task1.6:	 5
+
+Task1.7:	 6
+No description of method.
+
+Task1.8:	 1
+Provides a short description of experiments but no results/discussion are provided.
+
+* TASK1 MARKS (out of 50): 35
+-------------------------------------------------------
+
+Task2.1:	 6
+There is something wrong about the mat files saved. Be careful about the size of the confusion matrix.
+
+Task2.2:	 5
+There are some errors in the code. The number of elements in the mat is wrong.
+
+Task2.3:	 7
+Good
+
+Task2.4:	 4
+the correlation for the whole data is wrong
+
+Task2.5:	 5
+The cov matrix is wrong
+
+Task2.6:	 5
+The number of elements in each category is wrong
+
+Task2.7:	 5
+Good
+
+Task2.8:	 4
+the matrix results are wrong. run_mgcs.m does not existx
+
+* TASK2 MARKS (out of 50): 41
+-------------------------------------------------------
+
+* TOTAL RAW MARKS (out of 100): 76
+=======================================================
